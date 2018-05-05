@@ -30,7 +30,6 @@
     
      function ColorSelector(props){
             function colorOptions(){
-
                 return props.colors.map(function(name){
                     return(
                         <option value={name} key={name}>
@@ -40,11 +39,16 @@
                 });
             }
 
+            function onColorChange(evt){           
+                console.log('color change', evt.target.value);
+                props.handleColorChange(evt.target.value);
+            }
 
             return(
                 <div className="field-group">
                     <label htmlFor="color-options">Color:</label>
-                    <select defaultValue={props.color} name="colorOptions" id="color-options">
+                    <select defaultValue={props.color} name="colorOptions" id="color-options"
+                            onChange={onColorChange}>
                         {colorOptions()}
                     </select>
                 </div>
@@ -79,6 +83,15 @@
                 colors: availableColors
             });
         },
+        handleColorChange: function(selectedColor){
+            console.log('parent handleSizeChange', selectedColor);
+            
+            var availableSizes = window.Inventory.byColor[selectedColor];
+            
+            this.setState({
+                sizes: availableSizes
+            });
+        },
         
         render: function() {
             return(
@@ -89,7 +102,8 @@
                     <div className="selectors">
                         <SizeSelector size={this.state.size} sizes={this.state.sizes} 
                                 handleSizeChange={this.handleSizeChange} />
-                        <ColorSelector color={this.state.color} colors={this.state.colors} />
+                        <ColorSelector color={this.state.color} colors={this.state.colors} 
+                                handleColorChange={this.handleColorChange}/>
 
                     </div>
                 </div>
